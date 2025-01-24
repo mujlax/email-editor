@@ -1,6 +1,6 @@
 import styles from "./App.module.scss"
 import { Testcomponent } from './Testcomponent'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function App() {
 
@@ -11,7 +11,7 @@ export function App() {
     buttonText: 'click'
   })
 
-  const imageRef = useRef(null)
+
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -32,13 +32,26 @@ export function App() {
     }))
   }, [details.title])
 
+  const imageRef = useRef(null)
+
+  const onClick = () => {
+      if(!imageRef.current) return
+
+      imageRef.current.style.borderRadius = '20px'
+  }
+
+  const handleLoading = () => {
+    setDetails(prev => ({...prev, isLoading: !prev.isLoading}))
+  }
+
   return <div className={styles.layout}>
     <h1>Test</h1>
-    <img ref={imageRef} src='./sheets.webp' width={100} />
-    <button></button>
-    {details.isLoading ? <p>Loading...</p> : (
-      <Testcomponent details={details} setDetails={setDetails} />
-    )}
+    <img ref={imageRef} src='./sheets.webp' width={300} />
+    <br />
+    <button onClick={onClick}>Change Image</button>
+    {details.isLoading && (<p>Loading...</p>)}
+
+<Testcomponent details={details} handleLoading={handleLoading}/>
 
 
   </div>
